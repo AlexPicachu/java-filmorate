@@ -28,7 +28,7 @@ public class UserService {
         if (user.getBirthday().isAfter(presentTime)) {
             throw new ValidationException("дата рождения находится в будущем");
         }
-        if (user.getName().isEmpty()) {
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         user.setId(nextId++);

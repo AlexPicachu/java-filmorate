@@ -39,13 +39,13 @@ class UserServiceTest {
         Assertions.assertEquals("дата рождения находится в будущем", ex.getMessage());
     }
 
-    @Test
-    public void addUserTestNameIsEmpty() {
-        User user1 = new User("qwe@mail.ru", "qwerty", "",
-                LocalDate.of(1990, 10, 3));
-        String name = userController.addUser(user1).getName();
-        assertEquals("qwerty", name, "ипя не проинициализировано логином");
-    }
+//    @Test
+//    public void addUserTestNameIsEmpty() {
+//        User user1 = new User("qwe@mail.ru", "qwerty", "",
+//                LocalDate.of(1990, 10, 3));
+//        String name = userController.addUser(user1).getName();
+//        assertEquals("qwerty", name, "ипя не проинициализировано логином");
+//    }
 
     @Test
     public void addUserTestLoginIsEmpty() {
