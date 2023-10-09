@@ -1,13 +1,19 @@
 package ru.yandex.practicum.filmorate.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+// класс для обработки логики запросов из FilmController
 @Slf4j
+@Service
 public class FilmService {
 
 
@@ -15,10 +21,12 @@ public class FilmService {
     private int nextId = 1;
     private final LocalDate startOfReleaseDate = LocalDate.of(1895, 12, 28);
 
-    public Map<Integer, Film> getFilmMap() {
-        return filmMap;
+    // получение всех фильмов
+    public List<Film> getFilmMap() {
+        return new ArrayList<>(filmMap.values());
     }
 
+    //добавление фильмов
     public Film createFilm(Film film) {
         if (film.getName().isBlank()) {
             throw new ValidationException("название фильма отсутствует");
@@ -38,6 +46,7 @@ public class FilmService {
         return film;
     }
 
+    //обновление фильмов
     public Film updateFilms(Film film) {
         if (!filmMap.keySet().contains(film.getId())) {
             throw new ValidationException("фильма с id = " + film.getId() + " не существует");

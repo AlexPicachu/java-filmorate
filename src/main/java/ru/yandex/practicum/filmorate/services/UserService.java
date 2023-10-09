@@ -1,23 +1,30 @@
 package ru.yandex.practicum.filmorate.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+// класс обработки логики запросов приходящих с UserController
 @Slf4j
+@Service
 public class UserService {
     private final Map<Integer, User> userMap = new HashMap<>();
     private int nextId = 1;
     private final LocalDate presentTime = LocalDate.now();
 
-    public Map<Integer, User> getUserMap() {
-        return userMap;
+    //получение всех пользователей
+    public List<User> getUserMap() {
+        return new ArrayList<>(userMap.values());
     }
 
-
+    //добавление пользователей
     public User createUser(User user) {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             throw new ValidationException("электронная почта не заполнена или не содержит @ " + user.getEmail());
@@ -37,7 +44,7 @@ public class UserService {
         return userMap.get(user.getId());
     }
 
-
+    //обновление пользователей
     public User updateUsers(User user) {
         if (!userMap.keySet().contains(user.getId())) {
             throw new ValidationException("пользователя с id = " + user.getId() + " не существует");

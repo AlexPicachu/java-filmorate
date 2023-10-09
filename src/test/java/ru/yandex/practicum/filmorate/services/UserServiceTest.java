@@ -6,30 +6,36 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
+
 import java.time.LocalDate;
 import java.util.Collection;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+//тестовый класс для проверки работы класса UserController
 class UserServiceTest {
     User user;
     UserController userController;
+    UserService userService;
 
     @BeforeEach
     public void launchBefore() {
         user = new User("qwe@mail.ru", "qwerty", "Ivan",
                 LocalDate.of(1990, 10, 3));
-        userController = new UserController();
+        userService = new UserService();
+        userController = new UserController(userService);
     }
 
+    //проверяем работу метода addUser
     @Test
     public void addOfUserTest() {
-        Collection<User> userCollections = userController.getUser();
-        assertTrue(userCollections.isEmpty());
         userController.addUser(user);
+        Collection<User> userCollections = userController.getUser();
         assertEquals(1, userCollections.size(), "пользователь не добавлен");
     }
 
+    //проверяем работу метода addUser при негативном сценарии
     @Test
     public void addUserTesNegative() {
         User user1 = new User("qwe@mail.ru", "qwerty", "Ivan",
@@ -39,6 +45,7 @@ class UserServiceTest {
         Assertions.assertEquals("дата рождения находится в будущем", ex.getMessage());
     }
 
+    //проверяем работу метода addUser при незаполненном getName
     @Test
     public void addUserTestNameIsEmpty() {
         User user1 = new User("qwe@mail.ru", "qwerty",
@@ -47,6 +54,7 @@ class UserServiceTest {
         assertEquals("qwerty", name, "ипя не проинициализировано логином");
     }
 
+    //проверяем работу метода addUser при пустом Login
     @Test
     public void addUserTestLoginIsEmpty() {
         User user1 = new User("qwe@mail.ru", " ", "Ivanov",
@@ -56,6 +64,7 @@ class UserServiceTest {
         Assertions.assertEquals("логин пустой или содержит пробелы", ex.getMessage());
     }
 
+    //проверяем работу метода при неправильно заполненном Email
     @Test
     public void addUserTestEmailException() {
         User user1 = new User("qwemail.ru", "qwertyuiop", "Ivanov",
@@ -66,6 +75,7 @@ class UserServiceTest {
                 ex.getMessage());
     }
 
+    //проверяем работу метода updateUser
     @Test
     public void updateUserTest() {
         userController.addUser(user);
@@ -75,6 +85,7 @@ class UserServiceTest {
         assertEquals("Ivanov_Ivan", name, "иям не обновлено");
     }
 
+    //проверяем работу метода updateUser при негативном сценарии
     @Test
     public void updateUserTestNegative() {
         userController.addUser(user);
