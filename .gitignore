@@ -4,6 +4,7 @@
 *.war
 *.nar
 *.ear
+*.DS_Store
 *.zip
 *.tar.gz
 *.rar
