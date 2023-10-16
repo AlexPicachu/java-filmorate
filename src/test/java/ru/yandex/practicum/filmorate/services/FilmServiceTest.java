@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
 
 import java.time.LocalDate;
@@ -15,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //тестовый класс для FilmService
 class FilmServiceTest {
+    FilmStorage filmStorage;
+    UserStorage userStorage;
     FilmController filmController;
     FilmService filmService;
     Film film;
@@ -22,7 +28,9 @@ class FilmServiceTest {
 
     @BeforeEach
     public void launchBefore() {
-        filmService = new FilmService();
+        filmStorage = new InMemoryFilmStorage();
+        userStorage =new InMemoryUserStorage();
+        filmService = new FilmService(filmStorage, userStorage);
         filmController = new FilmController(filmService);
         film = new Film("поехали", "интересно",
                 LocalDate.of(2009, 11, 5), 100);

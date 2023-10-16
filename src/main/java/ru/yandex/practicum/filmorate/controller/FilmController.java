@@ -34,4 +34,8 @@ public class FilmController {
     public Film updateFilm(@RequestBody Film film) {
         return filmService.updateFilms(film);
     }
+    @PutMapping("/films/{id}/like/{userId}")
+    public void addLike(@PathVariable int id, @PathVariable int userId){
+        filmService.addLike(id, userId);
+    }
 }
