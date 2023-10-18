@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.services.FilmService;
 
 import java.util.Collection;
+import java.util.List;
 
 // класс контроллер для обработки фильмов
 @RestController
@@ -34,8 +35,26 @@ public class FilmController {
     public Film updateFilm(@RequestBody Film film) {
         return filmService.updateFilms(film);
     }
+
+    //метод добавления лайка
     @PutMapping("/films/{id}/like/{userId}")
-    public void addLike(@PathVariable int id, @PathVariable int userId){
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
         filmService.addLike(id, userId);
+    }
+
+    //метод удаления лайка
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public void deleteLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.deleteLike(id, userId);
+    }
+
+    //метод возвращающий ТОП 10 фильмов
+    @GetMapping("/films/popular")
+    public List<Film> topLikesFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.topLikeFilms(count);
+    }
+    @GetMapping("/films/{id}")
+    public Film getFilmById(@PathVariable int id){
+        return filmService.getFilmById(id);
     }
 }
