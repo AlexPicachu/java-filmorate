@@ -13,7 +13,8 @@ import ru.yandex.practicum.filmorate.validationException.ValidationException;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 //тестовый класс для проверки работы класса UserController
@@ -100,6 +101,40 @@ class UserServiceTest {
                 () -> userController.updateUser(user));
         Assertions.assertEquals("пользователя с id = " + user.getId() + " не существует",
                 ex.getMessage());
+    }
+
+    // проверяем работу метода добавления и удаления из друзей
+    @Test
+    public void addFriendUserEndDelete() {
+        User user1 = new User("qw@mail.ru", "asd", "zxc",
+                LocalDate.of(2000, 1, 1));
+        userController.addUser(user);
+        userController.addUser(user1);
+        userController.addFriend(user.getId(), user1.getId());
+        Collection<User> collection = userController.getFriend(user.getId());
+        assertFalse(collection.isEmpty());
+        assertTrue(collection.contains(user1));
+        userController.deleteFriend(user.getId(), user1.getId());
+        Collection<User> collection1 = userController.getFriend(user.getId());
+        assertTrue(collection1.isEmpty());
+    }
+
+    //проверяем работу метода возвращающего друзей/друзей
+    @Test
+    public void getFriendOfFriendsTest() {
+        User user1 = new User("qw@mail.ru", "asd", "zxc",
+                LocalDate.of(2000, 1, 1));
+        User user2 = new User("zxc@mail.ru", "poi", "Aleg",
+                LocalDate.of(2001, 12, 3));
+        userController.addUser(user);
+        userController.addUser(user1);
+        userController.addUser(user2);
+        userController.addFriend(user.getId(), user1.getId());
+        userController.addFriend(user1.getId(), user2.getId());
+        Collection<User> collectionFriendOfFriend =
+                userController.getFriendOfFriend(user.getId(), user2.getId());
+        assertTrue(collectionFriendOfFriend.contains(user1));
+
     }
 
 }

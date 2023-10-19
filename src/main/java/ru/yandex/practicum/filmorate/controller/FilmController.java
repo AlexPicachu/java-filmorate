@@ -53,8 +53,10 @@ public class FilmController {
     public List<Film> topLikesFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.topLikeFilms(count);
     }
+
+    //метод возвращающий фильм по id
     @GetMapping("/films/{id}")
-    public Film getFilmById(@PathVariable int id){
+    public Film getFilmById(@PathVariable int id) {
         return filmService.getFilmById(id);
     }
 }

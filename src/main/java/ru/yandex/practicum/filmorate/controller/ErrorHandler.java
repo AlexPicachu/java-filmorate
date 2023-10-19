@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.validationException.ErrorResponse;
 import ru.yandex.practicum.filmorate.validationException.NotFoundException;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
 
+//класс обработки ошибок
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {

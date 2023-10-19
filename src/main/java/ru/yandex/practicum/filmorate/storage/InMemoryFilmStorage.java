@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//класс хранилище фильмов
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -52,7 +53,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film updateFilms(Film film) {
         if (!filmMap.keySet().contains(film.getId())) {
-           throw new NotFoundException("Фильма с таким id = " + film.getId() + " не существует");
+            throw new NotFoundException("Фильма с таким id = " + film.getId() + " не существует");
         }
         for (Integer integer : filmMap.keySet()) {
             if (integer.equals(film.getId())) {
