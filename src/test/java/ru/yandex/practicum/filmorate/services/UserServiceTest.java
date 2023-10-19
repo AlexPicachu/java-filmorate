@@ -60,7 +60,7 @@ class UserServiceTest {
         assertEquals("qwerty", name, "ипя не проинициализировано логином");
     }
 
-    //проверяем работу метода addUser при пустом Login
+    // проверяем работу метода addUser при пустом Login
     @Test
     public void addUserTestLoginIsEmpty() {
         User user1 = new User("qwe@mail.ru", " ", "Ivanov",
