@@ -5,15 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.validationException.NotFoundException;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.compare;
 
-// класс для обработки логики запросов из FilmController
+
+/**
+ * класс для обработки логики запросов из FilmController
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,54 +23,68 @@ public class FilmService {
     private final FilmStorage filmStorage;
 
 
-    // получение всех фильмов
+    /**
+     * метод получение всех фильмов
+     */
     public List<Film> getFilmMap() {
         return filmStorage.getFilmMap();
     }
 
-    //добавление фильмов
+
+    /**
+     * метод добавление фильмов
+     */
     public Film createFilm(Film film) {
         return filmStorage.createFilm(film);
     }
 
-    //обновление фильмов
+
+    /**
+     * метод обновление фильмов
+     */
     public Film updateFilms(Film film) {
         return filmStorage.updateFilms(film);
     }
 
-    //поставить лайк
+
+    /**
+     * метод поставить лайк
+     * id идентификатор фильма
+     * userId идентификатор пользователя поставившего лайк
+     */
     public void addLike(int id, int userId) {
         Film film = filmStorage.getFilmById(id);
-        Set<Integer> integers = film.getLikes();
-        if (userId <= 0) {
-            throw new NotFoundException("Пользователя с таким id " + userId + " не существует");
-        } else {
-            integers.add(userId);
-            log.info("like успешно добавлен");
-            film.setLikes(integers);
-        }
+        Set<Integer> listLikes = film.getLikes();
+        listLikes.add(userId);
+        log.info("like успешно добавлен");
+        film.setLikes(listLikes);
+
     }
 
-    //удалить лайк
+    /**
+     * метод удалить лайк
+     * id - идентификатор фильма
+     * userId - идентификатор пользователя, лайк которого нужно удалить
+     */
     public void deleteLike(int id, int userId) {
         Film film = filmStorage.getFilmById(id);
-        Set<Integer> integers = film.getLikes();
-        if (userId <= 0) {
-            throw new NotFoundException("Пользователя с таким id " + userId + " не существует");
-        }
-        integers.remove(userId);
+        Set<Integer> listLikes = film.getLikes();
+        listLikes.remove(userId);
         log.info("like успешно удален");
-        film.setLikes(integers);
+        film.setLikes(listLikes);
     }
 
-    //топ фильмов
+    /**
+     * метод возвращающий ТОП фильмов по лайкам пользователей
+     * count - задано как defaultValue = 10
+     */
     public List<Film> topLikeFilms(int count) {
-        List<Film> list = getFilmMap();
-        if (count > list.size()) {
-            count = list.size();
+        List<Film> listFilms = getFilmMap();
+        if (count > listFilms.size()) {
+            count = listFilms.size();
         }
-        log.info("топ фильмов {}", list);
-        return list.stream()
+        log.info("топ фильмов {}", listFilms);
+        return listFilms.stream()
                 .sorted((p0, p1) -> {
                     int comp = compare(p0.getLikes().size(), p1.getLikes().size());
                     return -1 * comp;
@@ -79,7 +94,9 @@ public class FilmService {
 
     }
 
-    //фильм по id
+    /**
+     * метод возвращающий фильм по id
+     */
     public Film getFilmById(int id) {
         return filmStorage.getFilmById(id);
     }

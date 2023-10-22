@@ -21,7 +21,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//тестовый класс для FilmService
+
+/**
+ * тестовый класс для проверки FilmController
+ */
 class FilmServiceTest {
     FilmStorage filmStorage;
 
@@ -42,7 +45,10 @@ class FilmServiceTest {
                 LocalDate.of(1990, 10, 3));
     }
 
-    //проверяем метод getFilms, возврата фильмов
+
+    /**
+     * проверяем метод getFilms, возврата фильмов
+     */
     @Test
     public void getOfFilmTest() {
         filmController.addFilm(film);
@@ -50,14 +56,20 @@ class FilmServiceTest {
         assertEquals(1, filmList.size(), "фильмов храниться больше");
     }
 
-    //проверяем метод addFilm, добавления фильма, с положительным сценарием
+
+    /**
+     * проверяем метод addFilm, добавления фильма, с положительным сценарием
+     */
     @Test
     public void addFilmTestPositive() {
         Film film1 = filmController.addFilm(film);
         assertEquals("поехали", film1.getName(), "фильм не добавлен");
     }
 
-    //проверяем работу метода addFilm, с граничными значениями
+
+    /**
+     * проверяем работу метода addFilm, с граничными значениями
+     */
     @Test
     public void addFilmTestLimitValues() {
         Film film1 = filmController.addFilm(new Film("поехали", "интересно",
@@ -65,7 +77,10 @@ class FilmServiceTest {
         assertEquals(1, film1.getDuration(), "фильм не добавлен");
     }
 
-    // проверяем работу метода addFilm, при работе с исключениями(негативный тест)
+
+    /**
+     * проверяем работу метода addFilm, при работе с исключениями(негативный тест)
+     */
     @Test
     public void addFilmTestNegative() {
         Film film1 = new Film("поехали", "интересно",
@@ -76,7 +91,10 @@ class FilmServiceTest {
         Assertions.assertEquals("продолжительность фильма меньше или равна нулю", ex.getMessage());
     }
 
-    //проверяем работу метода updateFilm, обновление фильма
+
+    /**
+     * проверяем работу метода updateFilm, обновление фильма
+     */
     @Test
     public void updateTestFilm() {
         filmController.addFilm(film);
@@ -86,7 +104,10 @@ class FilmServiceTest {
         assertEquals("полетели, ф не поехали", film1.getName(), "фильм не обновлен");
     }
 
-    //проверяем работу метода updateFilm при негативном сценарии
+
+    /**
+     * проверяем работу метода updateFilm при негативном сценарии
+     */
     @Test
     public void updateTestNegative() {
         filmController.addFilm(film);
@@ -96,7 +117,10 @@ class FilmServiceTest {
         Assertions.assertEquals("Фильма с таким id = " + film.getId() + " не существует", ex.getMessage());
     }
 
-    //проверяем работу метода addLike
+
+    /**
+     * проверяем работу метода addLike
+     */
     @Test
     public void addLikeTest() {
         UserStorage userStorage = new InMemoryUserStorage();
@@ -110,7 +134,9 @@ class FilmServiceTest {
 
     }
 
-    //проверяем работу метода deleteLike
+    /**
+     * проверяем работу метода deleteLike
+     */
     @Test
     public void deleteLikeTest() {
         UserStorage userStorage = new InMemoryUserStorage();
@@ -125,7 +151,9 @@ class FilmServiceTest {
         assertTrue(film.getLikes().isEmpty());
     }
 
-    //проверяем работу метода getFilmById
+    /**
+     * проверяем работу метода getFilmById
+     */
     @Test
     public void getFilmByIdTest() {
         Film film1 = new Film("фильм", "интересный",
@@ -139,7 +167,9 @@ class FilmServiceTest {
         assertEquals(1, filmById.getId(), "фильм по id не вернулся");
     }
 
-    //проверяем работу метода topLikesFilm
+    /**
+     * проверяем работу метода topLikesFilm
+     */
     @Test
     public void topLikesFilmTest() {
         UserStorage userStorage = new InMemoryUserStorage();

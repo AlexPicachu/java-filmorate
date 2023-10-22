@@ -2,23 +2,42 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
 public class Film {
-    //целочисленный идентификатор
+
+    /**
+     * целочисленный идентификатор
+     */
     private int id;
-    //название
+
+    /**
+     * название
+     */
     private String name;
-    //описание
+
+    /**
+     * описание
+     */
     private String description;
-    //дата релиза
+
+    /**
+     * дата релиза
+     */
     private LocalDate releaseDate;
-    //продолжительность фильма
+
+    /**
+     * продолжительность фильма
+     */
     private int duration;
-    //хранение like
+
+    /**
+     * Set для хранения лайков поставленных пользователем
+     */
     private Set<Integer> likes = new HashSet<>();
 
     public Film(int id, String name, String description, LocalDate releaseDate, int duration) {

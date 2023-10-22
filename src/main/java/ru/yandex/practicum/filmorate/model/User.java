@@ -2,23 +2,43 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+
 public class User {
-    // целочисленный идентификатор
+
+    /**
+     * целочисленный идентификатор
+     */
     private int id;
-    //электронная почта
+
+    /**
+     * электронная почта
+     */
     private String email;
-    //логин пользователя
+
+    /**
+     * логин пользователя
+     */
     private String login;
-    //имя для отображения
+
+    /**
+     * имя для отображения
+     */
     private String name;
-    //дата рождения
+
+    /**
+     * дата рождения
+     */
     private LocalDate birthday;
-    //хранение друзей
+
+    /**
+     * Set для хранения id добавленных друзей
+     */
     private Set<Integer> friendsId = new HashSet<>();
 
     public User() {

@@ -1,6 +1,10 @@
 package ru.yandex.practicum.filmorate.validationException;
 
-//класс для обработки исключений
+
+
+/**
+ * класс обработки исключений
+ */
 public class ErrorResponse {
 
     private final String error;
