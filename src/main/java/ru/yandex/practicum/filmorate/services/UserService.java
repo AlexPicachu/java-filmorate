@@ -1,61 +1,114 @@
 package ru.yandex.practicum.filmorate.services;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.validationException.ValidationException;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-// класс обработки логики запросов приходящих с UserController
+
+/**
+ * класс обработки логики запросов приходящих с UserController
+ */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final Map<Integer, User> userMap = new HashMap<>();
-    private int nextId = 1;
-    private final LocalDate presentTime = LocalDate.now();
 
-    //получение всех пользователей
+    private final UserStorage userStorage;
+
+
+    /**
+     * метод получение всех пользователей
+     */
     public List<User> getUserMap() {
-        return new ArrayList<>(userMap.values());
+        return userStorage.getUserMap();
     }
 
-    //добавление пользователей
+
+    /**
+     * метод добавление пользователей
+     */
     public User createUser(User user) {
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-            throw new ValidationException("электронная почта не заполнена или не содержит @ " + user.getEmail());
-        }
-        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            throw new ValidationException("логин пустой или содержит пробелы");
-        }
-        if (user.getBirthday().isAfter(presentTime)) {
-            throw new ValidationException("дата рождения находится в будущем");
-        }
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-        }
-        user.setId(nextId++);
-        userMap.put(user.getId(), user);
-        log.info("user успешно добавлен");
-        return userMap.get(user.getId());
+        return userStorage.createUser(user);
     }
 
-    //обновление пользователей
+
+    /**
+     * метод обновление пользователей
+     */
     public User updateUsers(User user) {
-        if (!userMap.keySet().contains(user.getId())) {
-            throw new ValidationException("пользователя с id = " + user.getId() + " не существует");
-        }
-        for (Integer integer : userMap.keySet()) {
-            if (integer.equals(user.getId())) {
-                userMap.put(integer, user);
-                log.info("user успешно обновлен");
-            }
-        }
-        return userMap.get(user.getId());
+        return userStorage.updateUsers(user);
     }
 
+
+    /**
+     * метод добавление в друзья
+     * id идентификатор пользователя
+     * friendId - идентификатор добавляемого в друзья пользователя
+     */
+    public void addFriends(int id, int friendId) {
+        User user = userStorage.getUserById(id);
+        User user1 = userStorage.getUserById(friendId);
+        Set<Integer> listFriendId = user.getFriendsId();
+        Set<Integer> listFriendId1 = user1.getFriendsId();
+        listFriendId.add(friendId);
+        listFriendId1.add(id);
+        log.info("друзья успешно добавлен");
+        user.setFriendsId(listFriendId);
+        user1.setFriendsId(listFriendId1);
+    }
+
+    /**
+     * метод удаление из друзей
+     * id - идентификатор пользователя
+     * friendId - идентификатор удаляемого из друзей пользователя
+     */
+    public void deleteFriends(int id, int friendId) {
+        User user = userStorage.getUserById(id);
+        Set<Integer> listFriendId = user.getFriendsId();
+        listFriendId.remove(friendId);
+        user.setFriendsId(listFriendId);
+        log.info("друг с id " + friendId + " успешно удален");
+    }
+
+    /**
+     * метод возвращающий друзей пользователя по id
+     */
+    public List<User> getFriends(int id) {
+        User user = userStorage.getUserById(id);
+        Set<Integer> listFriendId = user.getFriendsId();
+        List<User> getFriend = new ArrayList<>();
+        for (Integer integer : listFriendId) {
+            getFriend.add(userStorage.getUserById(integer));
+        }
+        log.info("друзья USERa с id " + id + " {}", getFriend);
+        return getFriend;
+    }
+
+    /**
+     * метод возвращающий общих друзей с другом пользователем
+     * id - идентификатор первого пользователя
+     * otherId - идентификатор пользователя с которым нужно найти общих друзей
+     */
+    public List<User> getFriendOfFriends(int id, int otherId) {
+        List<User> userList = getFriends(id).stream()
+                .filter(getFriends(otherId)::contains)
+                .collect(Collectors.toList());
+        log.info("общие друзья USERa с id: " + id + " USERa c id: " + otherId + "{}", userList);
+        return userList;
+    }
+
+
+    /**
+     * метод возвращающий пользователя по id
+     */
+    public User getUserById(int id) {
+        return userStorage.getUserById(id);
+    }
 }
