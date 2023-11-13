@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.services.UserService;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.validationException.NotFoundException;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
 
 
@@ -27,7 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     /**
      * метод получения всех пользователей
      */
@@ -36,31 +33,17 @@ public class UserController {
         return userService.getUserMap();
     }
 
-
     /**
      * метод добавления пользователей
      */
     @PostMapping("/users")
     public User addUser(@RequestBody @Valid User user) {
-//        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-//            throw new ValidationException("электронная почта не заполнена или не содержит @ " + user.getEmail());
-//        }
-//        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-//            throw new ValidationException("логин пустой или содержит пробелы");
-//        }
-//        if (user.getBirthday().isAfter(LocalDate.now())) {
-//            throw new ValidationException("дата рождения находится в будущем");
-//        }
-//        if (user.getName() == null || user.getName().isBlank()) {
-//            user.setName(user.getLogin());
-//        }
         validate(user);
         user = checkName(user);
         userService.createUser(user);
         log.info("Добавление пользователя");
         return user;
     }
-
 
     /**
      * метод обновления пользователей
@@ -74,7 +57,6 @@ public class UserController {
         return user;
     }
 
-
     /**
      * метод добавления в друзья
      */
@@ -86,7 +68,6 @@ public class UserController {
         }
         userService.addFriends(id, friendId);
     }
-
 
     /**
      * метод удаления из друзей
@@ -100,7 +81,6 @@ public class UserController {
         userService.deleteFriends(id, friendId);
     }
 
-
     /**
      * метод возвращающий список друзей по id
      */
@@ -108,7 +88,6 @@ public class UserController {
     public Collection<User> getFriend(@PathVariable int id) {
         return userService.getFriends(id);
     }
-
 
     /**
      * метод возвращающий друзей/друзей (масло масляное)
@@ -119,7 +98,6 @@ public class UserController {
 
     }
 
-
     /**
      * метод возвращающий пользователя по id
      */
@@ -128,12 +106,18 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    /**
+     * вспомогательный метод проверки
+     */
     private void validate(User user) {
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Неверный login");
         }
     }
 
+    /**
+     * вспомогательный метод проверки
+     */
     private User checkName(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user = new User(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());

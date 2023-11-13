@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * модель фильма
+ */
 @Data
 public class Film {
 
@@ -45,13 +48,11 @@ public class Film {
      */
     private Set<Genre> genres = new HashSet<>();
 
-
     /**
-     * Set для хранения лайков поставленных пользователем
+     * лайки
      */
-   // private Set<Integer> likes = new HashSet<>();
-
     private Integer like;
+
     public Film(int id, String name, String description, LocalDate releaseDate, int duration) {
         this.id = id;
         this.name = name;
@@ -85,6 +86,14 @@ public class Film {
         this.mpa = mpa;
         this.genres = genres;
 
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, MPA mpa) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
     }
 
     public Film() {

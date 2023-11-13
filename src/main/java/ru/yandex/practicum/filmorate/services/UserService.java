@@ -7,10 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -31,14 +28,12 @@ public class UserService {
         return userStorage.getUserMap();
     }
 
-
     /**
      * метод добавление пользователей
      */
     public User createUser(User user) {
         return userStorage.createUser(user);
     }
-
 
     /**
      * метод обновление пользователей
@@ -60,15 +55,6 @@ public class UserService {
      * friendId - идентификатор добавляемого в друзья пользователя
      */
     public void addFriends(int id, int friendId) {
-//        User user = userStorage.getUserById(id);
-//        User user1 = userStorage.getUserById(friendId);
-//        Set<Integer> listFriendId = user.getFriendsId();
-//        Set<Integer> listFriendId1 = user1.getFriendsId();
-//        listFriendId.add(friendId);
-//        listFriendId1.add(id);
-//        log.info("друзья успешно добавлен");
-//        user.setFriendsId(listFriendId);
-//        user1.setFriendsId(listFriendId1);
         userDbStorage.addFriend(id, friendId);
     }
 
@@ -78,11 +64,6 @@ public class UserService {
      * friendId - идентификатор удаляемого из друзей пользователя
      */
     public void deleteFriends(int id, int friendId) {
-//        User user = userStorage.getUserById(id);
-//        Set<Integer> listFriendId = user.getFriendsId();
-//        listFriendId.remove(friendId);
-//        user.setFriendsId(listFriendId);
-//        log.info("друг с id " + friendId + " успешно удален");
         userDbStorage.deleteFriend(id, friendId);
     }
 
@@ -90,14 +71,6 @@ public class UserService {
      * метод возвращающий друзей пользователя по id
      */
     public List<User> getFriends(int id) {
-//        User user = userStorage.getUserById(id);
-//        Set<Integer> listFriendId = user.getFriendsId();
-//        List<User> getFriend = new ArrayList<>();
-//        for (Integer integer : listFriendId) {
-//            getFriend.add(userStorage.getUserById(integer));
-//        }
-//        log.info("друзья USERa с id " + id + " {}", getFriend);
-//        return getFriend;
         return userDbStorage.printFriend(id);
     }
 
@@ -107,14 +80,8 @@ public class UserService {
      * otherId - идентификатор пользователя с которым нужно найти общих друзей
      */
     public List<User> getFriendOfFriends(int id, int otherId) {
-//        List<User> userList = getFriends(id).stream()
-//                .filter(getFriends(otherId)::contains)
-//                .collect(Collectors.toList());
-//        log.info("общие друзья USERa с id: " + id + " USERa c id: " + otherId + "{}", userList);
-//        return userList;
         return userDbStorage.getFriendOfFriends(id, otherId);
     }
-
 
 
 }

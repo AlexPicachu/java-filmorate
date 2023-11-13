@@ -9,29 +9,41 @@ import ru.yandex.practicum.filmorate.storage.interfaces.ParameterStorage;
 
 import java.util.List;
 
+/**
+ * класс обработки запросов из ParameterController
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParameterService {
-  private final ParameterStorage parameterStorage;
+    private final ParameterStorage parameterStorage;
 
-   public List<Genre> getListGenre(){
-       return parameterStorage.getListGenre();
-   }
+    /**
+     * метод возвращающий список жанров
+     */
+    public List<Genre> getListGenre() {
+        return parameterStorage.getListGenre();
+    }
 
+    /**
+     * метод возвращающий жанр по id
+     */
+    public Genre getGenreById(int id) {
+        return parameterStorage.getGenreById(id);
+    }
 
-   public Genre getGenreById(int id){
-       return parameterStorage.getGenreById(id);
-   }
+    /**
+     * метод возвращающий список рейтингов
+     */
+    public List<MPA> getListMpa() {
+        return parameterStorage.getListMpa();
+    }
 
-
-   public List<MPA> getListMpa(){
-       return parameterStorage.getListMpa();
-   }
-
-
-   public MPA getMpaById(int id){
-       return parameterStorage.getMpaById(id);
-   }
+    /**
+     * метод возвращающий рейтинг по id
+     */
+    public MPA getMpaById(int id) {
+        return parameterStorage.getMpaById(id);
+    }
 
 }

@@ -9,6 +9,7 @@ import java.util.List;
  * контракт для реализации класса InMemoryUserStorage
  */
 public interface UserStorage {
+
     /**
      * метод возвращающий пользователя по id
      */

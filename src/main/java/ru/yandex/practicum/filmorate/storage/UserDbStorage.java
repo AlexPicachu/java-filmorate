@@ -19,13 +19,16 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * класс обрабатывающий логику работы с БД
+ */
 @Primary
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class UserDbStorage implements UserStorage {
 
-   private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     /**
      * метод создания нового пользователя
@@ -134,14 +137,14 @@ public class UserDbStorage implements UserStorage {
     /**
      * метод возвращающий друзей/друзей
      */
-    public List<User> getFriendOfFriends(int id, int oderId){
+    public List<User> getFriendOfFriends(int id, int oderId) {
         return printFriend(id).stream()
                 .filter(printFriend(oderId)::contains)
                 .collect(Collectors.toList());
     }
 
     /**
-     * вспомогательный метод сопоставляющий строки
+     * вспомогательный метод
      */
     private User mapRowToUser(ResultSet resultSet, int i) throws SQLException {
         User user = new User(

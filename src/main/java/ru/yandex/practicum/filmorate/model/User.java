@@ -11,8 +11,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * модель пользователя
+ */
 @Data
-
 public class User {
 
     /**
@@ -49,7 +51,7 @@ public class User {
      * Set для хранения id добавленных друзей
      */
     private Set<Integer> friendsId = new HashSet<>();
-    // пока непонятный сет
+
     public Set<Integer> applications = new HashSet<>();
 
     public User() {
