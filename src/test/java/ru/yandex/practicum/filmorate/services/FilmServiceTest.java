@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
- * тестовый класс для проверки FilmController.
+ * тестовый класс для проверки FilmController..
  */
 class FilmServiceTest {
     FilmStorage filmStorage;
