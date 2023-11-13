@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.interfaces.ParameterStorage;
-import ru.yandex.practicum.filmorate.validationException.ChangeException;
 import ru.yandex.practicum.filmorate.validationException.NotFoundException;
 
 import java.sql.ResultSet;
@@ -19,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ParameterObStorage implements ParameterStorage {
+public class ParameterDbStorage implements ParameterStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
