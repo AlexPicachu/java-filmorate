@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.interfaces;
 
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -9,6 +9,7 @@ import java.util.List;
  * контракт для реализации класса InMemoryUserStorage
  */
 public interface UserStorage {
+
     /**
      * метод возвращающий пользователя по id
      */

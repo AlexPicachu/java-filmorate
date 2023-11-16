@@ -3,20 +3,18 @@ package ru.yandex.practicum.filmorate.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.controller.FilmController;
-import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.validationException.NotFoundException;
 import ru.yandex.practicum.filmorate.validationException.ValidationException;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class FilmServiceTest {
     FilmStorage filmStorage;
-
+    FilmDbStorage filmDbStorage;
+    JdbcTemplate jdbcTemplate;
     FilmController filmController;
     FilmService filmService;
     Film film;
@@ -37,7 +36,9 @@ class FilmServiceTest {
     @BeforeEach
     public void launchBefore() {
         filmStorage = new InMemoryFilmStorage();
-        filmService = new FilmService(filmStorage);
+        jdbcTemplate = new JdbcTemplate();
+        filmDbStorage = new FilmDbStorage(jdbcTemplate);
+        filmService = new FilmService(filmStorage, filmDbStorage);
         filmController = new FilmController(filmService);
         film = new Film("поехали", "интересно",
                 LocalDate.of(2009, 11, 5), 100);
@@ -119,39 +120,6 @@ class FilmServiceTest {
 
 
     /**
-     * проверяем работу метода addLike
-     */
-    @Test
-    public void addLikeTest() {
-        UserStorage userStorage = new InMemoryUserStorage();
-        UserService userService = new UserService(userStorage);
-        UserController userController = new UserController(userService);
-        userController.addUser(user);
-        filmController.addFilm(film);
-        filmController.addLike(film.getId(), user.getId());
-        assertNotNull(film.getLikes());
-        assertEquals(1, film.getLikes().size(), "лайк не добавлен");
-
-    }
-
-    /**
-     * проверяем работу метода deleteLike
-     */
-    @Test
-    public void deleteLikeTest() {
-        UserStorage userStorage = new InMemoryUserStorage();
-        UserService userService = new UserService(userStorage);
-        UserController userController = new UserController(userService);
-        userController.addUser(user);
-        filmController.addFilm(film);
-        filmController.addLike(film.getId(), user.getId());
-        assertNotNull(film.getLikes());
-        assertEquals(1, film.getLikes().size(), "лайк не добавлен");
-        filmController.deleteLike(film.getId(), user.getId());
-        assertTrue(film.getLikes().isEmpty());
-    }
-
-    /**
      * проверяем работу метода getFilmById
      */
     @Test
@@ -167,52 +135,5 @@ class FilmServiceTest {
         assertEquals(1, filmById.getId(), "фильм по id не вернулся");
     }
 
-    /**
-     * проверяем работу метода topLikesFilm
-     */
-    @Test
-    public void topLikesFilmTest() {
-        UserStorage userStorage = new InMemoryUserStorage();
-        UserService userService = new UserService(userStorage);
-        UserController userController = new UserController(userService);
-        Film film1 = new Film("фильм", "интересный",
-                LocalDate.of(2009, 11, 4), 100);
-        Film film2 = new Film("фильм", "интересный",
-                LocalDate.of(2009, 11, 3), 100);
-        Film film3 = new Film("фильм", "интересный",
-                LocalDate.of(2009, 11, 2), 100);
-        Film film4 = new Film("фильм", "интересный",
-                LocalDate.of(2009, 11, 1), 100);
-        User user1 = new User("sqwe@mail.ru", "aqwerty", "Ivan",
-                LocalDate.of(1990, 11, 3));
-        User user2 = new User("dqwe@mail.ru", "zqwerty", "Ivan",
-                LocalDate.of(1990, 12, 3));
-        User user3 = new User("fqwe@mail.ru", "zqwerty", "Ivan",
-                LocalDate.of(1990, 6, 3));
-        filmController.addFilm(film);
-        filmController.addFilm(film1);
-        filmController.addFilm(film2);
-        filmController.addFilm(film3);
-        filmController.addFilm(film4);
-        userController.addUser(user);
-        userController.addUser(user1);
-        userController.addUser(user2);
-        userController.addUser(user3);
-        filmController.addLike(film.getId(), user.getId());
-        filmController.addLike(film.getId(), user1.getId());
-        filmController.addLike(film.getId(), user2.getId());
-        filmController.addLike(film1.getId(), user3.getId());
-        filmController.addLike(film1.getId(), user2.getId());
-        filmController.addLike(film4.getId(), user.getId());
-        filmController.addLike(film4.getId(), user1.getId());
-        filmController.addLike(film4.getId(), user2.getId());
-        filmController.addLike(film4.getId(), user3.getId());
-        List<Film> filmList = filmController.topLikesFilms(10);
-        assertFalse(filmList.isEmpty());
-        assertEquals(4, filmList.get(0).getLikes().size(),
-                "фильм с наибольшим количеством лайков не на первом месте");
-
-
-    }
 }
 

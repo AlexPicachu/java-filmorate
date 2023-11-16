@@ -3,12 +3,18 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * модель пользователя
+ */
 @Data
-
 public class User {
 
     /**
@@ -19,11 +25,14 @@ public class User {
     /**
      * электронная почта
      */
+    @NotBlank
+    @Email
     private String email;
 
     /**
      * логин пользователя
      */
+    @NotBlank
     private String login;
 
     /**
@@ -34,12 +43,16 @@ public class User {
     /**
      * дата рождения
      */
+    @PastOrPresent
+    @NotNull
     private LocalDate birthday;
 
     /**
      * Set для хранения id добавленных друзей
      */
     private Set<Integer> friendsId = new HashSet<>();
+
+    public Set<Integer> applications = new HashSet<>();
 
     public User() {
     }
